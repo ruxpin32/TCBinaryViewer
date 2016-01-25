@@ -152,8 +152,6 @@ namespace TCBinaryViewer
 				// End of line.
 				buffer[dst++] = '\r';
 				buffer[dst++] = '\n';
-
-				src += 16;
 			}
 			buffer[dst] = '\0';
 
