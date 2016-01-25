@@ -98,12 +98,13 @@ namespace TCBinaryViewer
 				// Take this one row at a time.
 				int rowOffset = src;
 				int rowLength = data.Length - rowOffset;
+				int i = 0;
 
 				// Row address.
 				UInt32 address = (UInt32) rowOffset;
 				UInt32 mask    = 0xF0000000;
 				int    shift   = 28;
-				for (int i = 0; i < 8; ++i)
+				for (i = 0; i < 8; ++i)
 				{
 					int value = (int) (address & mask) >> shift;
 					buffer[dst++] = digits[value];
@@ -114,7 +115,7 @@ namespace TCBinaryViewer
 				// Row bytes.
 				buffer[dst++] = ' ';
 				buffer[dst++] = ' ';
-				for (int i = 0; i < rowLength && i < 16; ++i)
+				for (i = 0; i < rowLength && i < 16; ++i)
 				{
 					Byte value = data[src++];
 					buffer[dst++] = digits[(value & 0xF0) >> 4];
@@ -125,13 +126,19 @@ namespace TCBinaryViewer
 					else
 						buffer[dst++] = ' ';
 				}
+				for (; i < 16; ++i)
+				{
+					buffer[dst++] = ' ';
+					buffer[dst++] = ' ';
+					buffer[dst++] = ' ';
+				}
 				src = rowOffset;
 
 				// Row ASCII.
 				buffer[dst++] = ' ';
 				buffer[dst++] = ' ';
 				buffer[dst++] = ' ';
-				for (int i = 0; i < rowLength && i < 16; ++i)
+				for (i = 0; i < rowLength && i < 16; ++i)
 				{
 					Byte value = data[src++];
 					if (value >= ' ' && value <= '~')
@@ -139,6 +146,8 @@ namespace TCBinaryViewer
 					else
 						buffer[dst++] = '.';
 				}
+				for (; i < 16; ++i)
+					buffer[dst++] = ' ';
 
 				// End of line.
 				buffer[dst++] = '\r';
